@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">watchapp</string>
+    <string name="connect">连接到Broker</string>
+    <string name="disconnect">断开连接</string>
+    <string name="send">开始发送数据</string>
+    <string name="stop_send">停止发送数据</string>
+    <string name="title">控制台</string>
+</resources>
