@@ -5,21 +5,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    deviceInfo: []
+    deviceInfo: [],
+    devices: new Map()
   },
   mutations: {
     updateDeviceInfo(state, payload) {
-      state.deviceInfo.push({
-        xginfo: payload.xginfo,
-        yginfo: payload.yginfo,
-        zginfo: payload.zginfo,
-        xainfo: payload.xainfo,
-        yainfo: payload.yainfo,
-        zainfo: payload.zainfo,
-        xsinfo: payload.xsinfo,
-        ysinfo: payload.ysinfo,
-        zsinfo: payload.zsinfo
-      })
+      var info = JSON.parse(payload)
+      state.devices.set(info['id'], info)
+      state.deviceInfo = Array.from(state.devices.values())
+    },
+    addDevice(state, payload) {
+      state.devices.set(payload, { "id": payload })
+      state.deviceInfo = Array.from(state.devices.values())
+    },
+    delDevice(state, payload) {
+      state.devices.delete(payload)
+      state.deviceInfo = Array.from(state.devices.values())
     }
   },
   actions: {

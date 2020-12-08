@@ -16,7 +16,7 @@ var client = new WebClient(host, port)
 client.on("connect", function () {
   console.log("Connected to the broker")
   // Subscribe the topic
-  client.subscribe('deviceInfo')
+  client.subscribe(['deviceInfo', 'connect', 'disconnect'])
 })
 client.on("reconnect", function () {
   console.log("Trying to reconnect...")
@@ -39,7 +39,13 @@ client.on("message", function (topic, message) {
   console.log("Receive message: " + message + " (from topic: " + topic + ")")
   switch (topic) {
     case 'deviceInfo':
-      this.$store.commit('updateDeviceInfo', message)
+      store.commit('updateDeviceInfo', message)
+      break;
+    case 'connect':
+      store.commit('addDevice', message)
+      break;
+    case 'disconnect':
+      store.commit('delDevice', message)
       break;
     default:
       break;
