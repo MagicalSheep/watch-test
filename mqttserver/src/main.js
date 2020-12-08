@@ -9,7 +9,7 @@ function main() {
     client.on("connect", function () {
         console.log("Connected to the broker")
         // Subscribe the topic
-        client.subscribe('deviceInfo')
+        client.subscribe(['deviceInfo', 'connect', 'disconnect'])
     })
     client.on("reconnect", function () {
         console.log("Trying to reconnect...")
@@ -33,6 +33,12 @@ function main() {
         switch (topic) {
             case 'deviceInfo':
                 // TODO: Push into Kafka
+                break;
+            case 'connect':
+                console.log('Device ' + message + ' has connected')
+                break;
+            case 'disconnect':
+                console.log('Device ' + message + ' has disconnected')
                 break;
             default:
                 break;
