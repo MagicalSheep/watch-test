@@ -1,11 +1,17 @@
 var mqtt = require('mqtt')
 var MqttServer = require('./mqtt/client.js')
+var KafkaWorker = require('./kafka/kafka.js')
 var host = 'mqtt://platform.magicalsheep.cn'
 var port = '1883'
 
 function main() {
     var client = new MqttServer(host, port)
+    var kafka = new KafkaWorker('mqttserver', ['localhost:9092'], 'device')
     // Register event listener
+    kafka.on("message", function (message) {
+        console.log("Receive message from kafka: " + message)
+    })
+    kafka.connect()
     client.on("connect", function () {
         console.log("Connected to the broker")
         // Subscribe the topic
@@ -32,7 +38,8 @@ function main() {
         console.log("Receive message: " + message + " (from topic: " + topic + ")")
         switch (topic) {
             case 'deviceInfo':
-                // TODO: Push into Kafka
+                // Push into Kafka
+                kafka.produce('watchmsg', [{ value: message }])
                 break;
             case 'connect':
                 console.log('Device ' + message + ' has connected')
